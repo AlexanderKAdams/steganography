@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
   int rowPadding;
 
   int i, j;
+  int copy = 0;
 
   /* read header into array */
   fread(header, 1, 54, in);
@@ -96,26 +97,33 @@ int main(int argc, char *argv[])
   /* Read RGB data from original, copy with message*/
   for(i = 0; i < pixelHeight; ++i)
   {
-    for(j = 0; j < pixelWidth; ++j)
+    for(j = 0; j < pixelWidth; j++)
     {
-      unsigned char bytes[8];
-      unsigned char message;
+      unsigned char bytes[4];
+      unsigned int message;
       int k;
 
       /* color order is BGR */
-      fread(bytes, 1, 8, in);
+      fread(bytes, 1, 4, in);
 
       /* set last bytes to message */
-      for (k=0; k<2; k++)
+      for (k=0; k<4; k++)
       {
+        if(copy) continue;
         message = getchar();
-        if (message != '\0')
+
+        bytes[k] >>= 2;
+        bytes[k] <<= 2;
+
+        bytes[k] |= 
+
+        if(message==EOF)
         {
-          bytes[6+k] = message;
+          copy=1;
         }
       }
 
-      fwrite(bytes, 1, 8, out);
+      fwrite(bytes, 1, 4, out);
     }
 
     /* handle end of row padding */
