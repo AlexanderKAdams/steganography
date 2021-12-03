@@ -29,9 +29,10 @@ int main(int argc, char *argv[])
 
   if (argc != 2)
   {
-    printf("USAGE:\ndesteg {input file}");
+    printf("USAGE:\ndesteg {input file}\n");
     exit(1);
   }
+
   infilename = argv[1];
 
   in = fopen(infilename, "rb");

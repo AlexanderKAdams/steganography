@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
   if (argc != 3)
   {
-    printf("USAGE:\nsteg {input file} {output file}");
+    printf("USAGE:\nsteg {input file} {output file}\n");
     exit(1);
   }
   infilename = argv[1];
@@ -71,11 +71,6 @@ int main(int argc, char *argv[])
 
   pixelWidth = getIntFromArray(&header[18]);
   pixelHeight = getIntFromArray(&header[22]);
-
-  /* compute row padding */
-  rowSize = pixelWidth*3;
-  rowPadding = (4 - (rowSize % 4)) % 4;
-  rowSize += rowPadding;
 
   /* write header to output file */
   fwrite(header, 1, sizeof(header), out);
