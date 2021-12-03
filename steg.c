@@ -34,6 +34,13 @@ int main(int argc, char *argv[])
 
   FILE* in;
   FILE* out;
+  int pixelWidth;
+  int pixelHeight;
+  int rowSize;
+  int rowPadding;
+
+  int i, j;
+  int copy = 0;
 
   if (argc != 3)
   {
@@ -43,18 +50,8 @@ int main(int argc, char *argv[])
   infilename = argv[1];
   outfilename = argv[2];
 
-
-
   in = fopen(infilename, "rb");
   out = fopen(outfilename, "wb");
-
-  int pixelWidth;
-  int pixelHeight;
-  int rowSize;
-  int rowPadding;
-
-  int i, j;
-  int copy = 0;
 
   /* read header into array */
   fread(header, 1, 54, in);
