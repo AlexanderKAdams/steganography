@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
 {
   char* infilename;
   char* outfilename;
+  unsigned char header[54];
+
   if (argc != 3)
   {
     printf("USAGE:\nsteg {input file} {output file}");
@@ -38,7 +40,7 @@ int main(int argc, char *argv[])
   infilename = argv[1];
   outfilename = argv[2];
 
-  unsigned char header[54];
+
 
   FILE* in = fopen(infilename, "rb");
   FILE* out = fopen(outfilename, "wb");
