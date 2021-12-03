@@ -3,4 +3,5 @@ project(steganography C)
 
 set(CMAKE_C_STANDARD 90)
 
-add_executable(steganography steg.c)
+add_executable(steg steg.c)
+add_executable(desteg desteg.c)

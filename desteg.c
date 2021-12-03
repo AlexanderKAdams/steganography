@@ -28,18 +28,16 @@ int getIntFromArray(unsigned char bytes[])
 
 int main(int argc, char *argv[])
 {
-  if (argc != 3)
+  if (argc != 2)
   {
-    printf("USAGE:\nsteg {input file} {output file}");
+    printf("USAGE:\ndesteg {input file}");
     exit(1);
   }
   char* infilename = argv[1];
-  char* outfilename = argv[2];
 
   unsigned char header[54];
 
   FILE* in = fopen(infilename, "rb");
-  FILE* out = fopen(outfilename, "wb");
 
   int fileSize;
   int pixelWidth;
@@ -78,51 +76,31 @@ int main(int argc, char *argv[])
   pixelWidth = getIntFromArray(&header[18]);
   pixelHeight = getIntFromArray(&header[22]);
 
-  /* compute row padding */
-  rowSize = pixelWidth*3;
-  rowPadding = (4 - (rowSize % 4)) % 4;
-  rowSize += rowPadding;
-
-  /* write header to output file */
-  fwrite(header, 1, sizeof(header), out);
 
   /* Read RGB data from original, copy with message*/
   for(i = 0; i < pixelHeight; ++i)
   {
     for(j = 0; j < pixelWidth; j++)
     {
-      if(copy) continue;
       unsigned char bytes[4];
       unsigned int message;
-
-      message = getchar();
+      int k;
 
       /* color order is BGR */
       fread(bytes, 1, 4, in);
 
       /* set last bytes to message */
-      if(message == EOF)
+      for (k=0; k<4; k++)
       {
-        printf("EOF hit\n");
-        bytes[0] &= 0xFC;
-        bytes[1] &= 0xFC;
-        bytes[2] &= 0xFC;
-        bytes[3] &= 0xFC;
-        copy = 1;
+        bytes[k]<<=6;
+        bytes[k]>>=(k*2);
       }
-      else
-      {
-        bytes[3]=(message & 3) | (bytes[3] & 0xFC);
-        bytes[2]=(message & 3) | (bytes[2] & 0xFC);
-        bytes[1]=(message & 3) | (bytes[1] & 0xFC);
-        bytes[0]=(message & 3) | (bytes[0] & 0xFC);
-      }
-
-      fwrite(bytes, 1, 4, out);
+      message=bytes[0]|bytes[1]|bytes[2]|bytes[3];
+      if(message == '\0') exit(0);
+      else printf("%c", message);
     }
   }
 
   fclose(in);
-  fclose(out);
   return 0;
 }
