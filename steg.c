@@ -32,6 +32,9 @@ int main(int argc, char *argv[])
   char* outfilename;
   unsigned char header[54];
 
+  FILE* in;
+  FILE* out;
+
   if (argc != 3)
   {
     printf("USAGE:\nsteg {input file} {output file}");
@@ -42,8 +45,8 @@ int main(int argc, char *argv[])
 
 
 
-  FILE* in = fopen(infilename, "rb");
-  FILE* out = fopen(outfilename, "wb");
+  in = fopen(infilename, "rb");
+  out = fopen(outfilename, "wb");
 
   int pixelWidth;
   int pixelHeight;
