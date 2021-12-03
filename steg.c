@@ -28,8 +28,6 @@ int main(int argc, char *argv[])
   FILE* out;
   int pixelWidth;
   int pixelHeight;
-  int rowSize;
-  int rowPadding;
 
   int i, j;
   int copy = 0;
