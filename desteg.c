@@ -8,14 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void copyIntToAddress(int n, unsigned char bytes[])
-{
-  bytes[0] = n & 0xFF;
-  bytes[1] = (n >>  8) & 0xFF;
-  bytes[2] = (n >> 16) & 0xFF;
-  bytes[3] = (n >> 24) & 0xFF;
-}
-
 int getIntFromArray(unsigned char bytes[])
 {
   int n =
@@ -28,26 +20,21 @@ int getIntFromArray(unsigned char bytes[])
 
 int main(int argc, char *argv[])
 {
+  int pixelWidth;
+  int pixelHeight;
+  int i, j;
+  FILE* in;
+  unsigned char header[54];
+  char* infilename;
+
   if (argc != 2)
   {
     printf("USAGE:\ndesteg {input file}");
     exit(1);
   }
-  char* infilename = argv[1];
+  infilename = argv[1];
 
-  unsigned char header[54];
-
-  FILE* in = fopen(infilename, "rb");
-
-  int fileSize;
-  int pixelWidth;
-  int pixelHeight;
-  int pixelDataSize;
-  int rowSize;
-  int rowPadding;
-
-  int i, j;
-  int copy = 0;
+  in = fopen(infilename, "rb");
 
   /* read header into array */
   fread(header, 1, 54, in);

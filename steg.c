@@ -8,14 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void copyIntToAddress(int n, unsigned char bytes[])
-{
-  bytes[0] = n & 0xFF;
-  bytes[1] = (n >>  8) & 0xFF;
-  bytes[2] = (n >> 16) & 0xFF;
-  bytes[3] = (n >> 24) & 0xFF;
-}
-
 int getIntFromArray(unsigned char bytes[])
 {
   int n =
