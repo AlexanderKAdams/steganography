@@ -28,23 +28,23 @@ int getIntFromArray(unsigned char bytes[])
 
 int main(int argc, char *argv[])
 {
+  char* infilename;
+  char* outfilename;
   if (argc != 3)
   {
     printf("USAGE:\nsteg {input file} {output file}");
     exit(1);
   }
-  char* infilename = argv[1];
-  char* outfilename = argv[2];
+  infilename = argv[1];
+  outfilename = argv[2];
 
   unsigned char header[54];
 
   FILE* in = fopen(infilename, "rb");
   FILE* out = fopen(outfilename, "wb");
 
-  int fileSize;
   int pixelWidth;
   int pixelHeight;
-  int pixelDataSize;
   int rowSize;
   int rowPadding;
 
@@ -91,7 +91,6 @@ int main(int argc, char *argv[])
   {
     for(j = 0; j < pixelWidth; j++)
     {
-      if(copy) continue;
       unsigned char bytes[4];
       unsigned int message;
 
@@ -101,23 +100,23 @@ int main(int argc, char *argv[])
       fread(bytes, 1, 4, in);
 
       /* set last bytes to message */
-      if(message == EOF)
-      {
-        printf("EOF hit\n");
-        bytes[0] &= 0xFC;
-        bytes[1] &= 0xFC;
-        bytes[2] &= 0xFC;
-        bytes[3] &= 0xFC;
-        copy = 1;
+      if(!copy){
+        if(message == EOF)
+        {
+          bytes[0] &= 0xFC;
+          bytes[1] &= 0xFC;
+          bytes[2] &= 0xFC;
+          bytes[3] &= 0xFC;
+          copy = 1;
+        }
+        else
+        {
+          bytes[3]=(message & 3) | (bytes[3] & 0xFC);
+          bytes[2]=(message >> 2) | (bytes[2] & 0xFC);
+          bytes[1]=(message >> 4) | (bytes[1] & 0xFC);
+          bytes[0]=(message >> 6) | (bytes[0] & 0xFC);
+        }
       }
-      else
-      {
-        bytes[3]=(message & 3) | (bytes[3] & 0xFC);
-        bytes[2]=(message & 3) | (bytes[2] & 0xFC);
-        bytes[1]=(message & 3) | (bytes[1] & 0xFC);
-        bytes[0]=(message & 3) | (bytes[0] & 0xFC);
-      }
-
       fwrite(bytes, 1, 4, out);
     }
   }
