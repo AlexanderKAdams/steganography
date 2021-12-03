@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int getIntFromArray(unsigned char bytes[])
+int getIntFromArray(const unsigned char bytes[])
 {
   int n =
     bytes[0] |
